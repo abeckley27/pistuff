@@ -5,6 +5,7 @@
 #include <ctime>
 #include <cstdint>
 #include <gmp.h>
+#include <omp.h>
 
 using namespace std;
 
@@ -85,7 +86,7 @@ int main() {
 
 	clock_t t0 = clock();
 	const int64_t N = 1000;
-	const int64_t M = 100000;
+	const int64_t M = 14 * N;
 	mpf_set_default_prec(M);
 
 	ofstream f;
@@ -107,6 +108,9 @@ int main() {
 	
 	cout << "Start summing sequence\n";
 
+	// 2 threaded version for now
+	
+
 	for (int64_t k = 0; k < N; k++) {
 		mpf_t temp;
 		mpf_init_set_si(temp, 1);
@@ -121,8 +125,10 @@ int main() {
 	mpf_div(pi, x1, x4);
 
 
-	f << setprecision(int64_t(0.9*M)) << pi << endl;
+	f << setprecision(int64_t(0.99*M)) << pi << endl;
+	f.close();
 
+	cout << "Time: " << double(clock() - t0) / CLOCKS_PER_SEC << " s\n";
 
 	return 0;
 }
