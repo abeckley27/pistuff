@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <fstream>
 #include <cmath>
 #include <ctime>
 #include <cstdint>
@@ -44,9 +45,13 @@ void sin(mpf_t x1, mpf_t x2, int64_t n) {
 
 void chud_term(int64_t k, mpf_t output) {
 
+	//cout << "Check sign\n";
 	mpf_t a6k, a2, sign;
-	if (k%2) { mpf_set_si(sign, -1.0); }
-	else { mpf_set_si(sign, 1.0); }
+	int64_t q = -2 * int64_t(k%2) + 1;
+	mpf_init_set_si(sign, q);
+
+	//cout << "Initialize numerator terms\n";
+
 	mpf_init(a6k);
 	factorial(6*k, a6k);
 	int64_t b2 = 545140134 * k + 13591409;
@@ -54,9 +59,13 @@ void chud_term(int64_t k, mpf_t output) {
 	mpf_mul(a2, a2, a6k);
 	mpf_mul(a2, a2, sign);
 
+	//cout << "Initialize denominator terms\n";
+
 	mpf_t a3k, ak3, a4;
 	mpf_init(a3k);
 	mpf_init(ak3);
+
+	//cout << "Compute factorials\n";
 
 	factorial(3*k, a3k);
 	factorial(k, ak3);
@@ -75,29 +84,44 @@ void chud_term(int64_t k, mpf_t output) {
 int main() {
 
 	clock_t t0 = clock();
-	mpf_set_default_prec(1000);
-	const int64_t N = 5;
+	const int64_t N = 1000;
+	const int64_t M = 100000;
+	mpf_set_default_prec(M);
+
+	ofstream f;
+	f.open("pi.txt");
 
 	mpf_t x1, x2, x3, x4, x5, x6, one;
+
+	cout << "Initialize x1 & x2\n";
 	mpf_init_set_si(x1, 426880);
 	mpf_init_set_si(x2, 10005);
 	mpf_init_set_si(one, 1.0);
 	mpf_sqrt(x2, x2);
 	mpf_mul(x1, x1, x2);
 
+	
+
+	cout << "Initialize x4\n";
 	mpf_init_set_si(x4, 0);
+	
+	cout << "Start summing sequence\n";
+
 	for (int64_t k = 0; k < N; k++) {
 		mpf_t temp;
-		mpf_init(temp);
+		mpf_init_set_si(temp, 1);
 		chud_term(k, temp);
 		mpf_add(x4, x4, temp);
 	}
+
+	
 
 	mpf_t pi;
 	mpf_init(pi);
 	mpf_div(pi, x1, x4);
 
-	cout << setprecision(10) << pi << endl;
+
+	f << setprecision(int64_t(0.9*M)) << pi << endl;
 
 
 	return 0;
