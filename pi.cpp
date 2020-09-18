@@ -1,13 +1,14 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <string>
 #include <cmath>
 #include <ctime>
 #include <cstdint>
 #include <gmp.h>
-#include <omp.h>
 
 using namespace std;
+#define digits 10000
 
 void factorial(int64_t n, mpf_t output) {
 	mpf_t a1;
@@ -85,12 +86,14 @@ void chud_term(int64_t k, mpf_t output) {
 int main() {
 
 	clock_t t0 = clock();
-	const int64_t N = 1000;
-	const int64_t M = 14 * N;
+	const int64_t M = int64_t(digits * (3.333));
+	const int64_t N = int64_t(M / 14);
+	
 	mpf_set_default_prec(M);
 
 	ofstream f;
-	f.open("pi.txt");
+	string fname = "pi_" + to_string(digits) + ".txt";
+	f.open(fname);
 
 	mpf_t x1, x2, x3, x4, x5, x6, one;
 
@@ -101,16 +104,11 @@ int main() {
 	mpf_sqrt(x2, x2);
 	mpf_mul(x1, x1, x2);
 
-	
-
 	cout << "Initialize x4\n";
 	mpf_init_set_si(x4, 0);
 	
 	cout << "Start summing sequence\n";
-
-	// 2 threaded version for now
 	
-
 	for (int64_t k = 0; k < N; k++) {
 		mpf_t temp;
 		mpf_init_set_si(temp, 1);
@@ -118,14 +116,11 @@ int main() {
 		mpf_add(x4, x4, temp);
 	}
 
-	
-
 	mpf_t pi;
 	mpf_init(pi);
 	mpf_div(pi, x1, x4);
 
-
-	f << setprecision(int64_t(0.99*M)) << pi << endl;
+	f << setprecision(M-2) << pi << endl;
 	f.close();
 
 	cout << "Time: " << double(clock() - t0) / CLOCKS_PER_SEC << " s\n";
