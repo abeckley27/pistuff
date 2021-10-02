@@ -18,6 +18,7 @@ void factorial(int64_t n, mpf_t output) {
 		mpf_set_si(a1, i); 
 		mpf_mul(output, output, a1);
 	}
+	mpf_clear(a1);
 }
 
 void term(int64_t n, mpf_t x, mpf_t output) {
@@ -33,6 +34,9 @@ void term(int64_t n, mpf_t x, mpf_t output) {
 
 	mpf_pow_ui(a4, x, unsigned(2*n+1));
 	mpf_mul(output, a4, a2);
+	mpf_clear(a2);
+	mpf_clear(a3);
+	mpf_clear(a4);
 }
 
 void sin(mpf_t x1, mpf_t x2, int64_t n) {
@@ -42,6 +46,7 @@ void sin(mpf_t x1, mpf_t x2, int64_t n) {
 		mpf_init(temp);
 		term(i, x1, temp);
 		mpf_add(x2, x2, temp);
+		mpf_clear(temp);
 	}
 }
 
@@ -72,7 +77,9 @@ void chud_term(int64_t k, mpf_t output) {
 	factorial(3*k, a3k);
 	factorial(k, ak3);
 	mpf_pow_ui(ak3, ak3, 3);
-	mpf_init_set_si(a4, 262537412640768000);
+	mpf_init_set_si(a4, 16392192);
+	mpf_mul_ui(a4, a4, 16016004);
+	mpf_mul_ui(a4, a4, 1000);
 	mpf_pow_ui(a4, a4, k);
 	
 	mpf_t denom;
@@ -114,6 +121,7 @@ int main() {
 		mpf_init_set_si(temp, 1);
 		chud_term(k, temp);
 		mpf_add(x4, x4, temp);
+		mpf_clear(temp);
 	}
 
 	mpf_t pi;
