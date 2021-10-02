@@ -13,12 +13,12 @@ using namespace std;
 int main() {
 
 	clock_t t0 = clock();
-	int64_t digits = 2000;
-	const int64_t N = 2000000;
-	const int64_t M = 500;
+	int64_t digits = 1000;
+	const int64_t N = 200000;
+	const int64_t M = 300;
 
 	string fname = "pi_" + to_string(digits) + ".txt";
-	digits = digits * 1.5 * log(10);
+	digits = digits * 1.44 * log(10);
 	mpf_set_default_prec(digits);
 	
 	mpf_t x1, x2, one, two;
@@ -46,6 +46,9 @@ int main() {
 	int64_t n1 = 2 * N + 1;
 	mpf_t* partsum_array = new mpf_t[M];
 	
+	cout << "Time: " << double(clock() - t0) / CLOCKS_PER_SEC << " s\n";
+	cout << "start averaging partial sums: \n";
+
 	for (k = N; k < N + M; k++) {
 		mpf_t temp;
 		mpf_init_set_si(temp, 2 * k  + 1);
