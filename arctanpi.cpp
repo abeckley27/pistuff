@@ -10,15 +10,21 @@
 
 using namespace std;
 
-int main() {
+int main(int argc, char* argv[]) {
 
 	clock_t t0 = clock();
-	int64_t digits = 1000;
-	const int64_t N = 200000;
-	const int64_t M = 300;
+	int64_t digits = 2000;
+	int64_t N = 1000000;
+	int64_t M = 1000;
+
+	cout << argc << endl;
+	if (argc > 1) {
+		N = stoi(argv[1]);
+		M = stoi(argv[2]);
+	}
 
 	string fname = "pi_" + to_string(digits) + ".txt";
-	digits = digits * 1.44 * log(10);
+	digits = digits * 1.442 * log(10);
 	mpf_set_default_prec(digits);
 	
 	mpf_t x1, x2, one, two;
@@ -28,9 +34,6 @@ int main() {
 	mpf_init_set_si(x1, 1.0);
 	mpf_init_set_si(x2, -1.0);
 	mpf_init_set_si(one, 1.0);
-	mpf_init_set_si(two, 2.0);
-//	mpf_sqrt(x2, x2);
-//	mpf_mul(x1, x1, x2);
 	
 	cout << "Start summing sequence\n";
 	
@@ -38,8 +41,8 @@ int main() {
 		mpf_t temp;
 		mpf_init_set_si(temp, 2 * k + 1);
 		mpf_div(temp, one, temp);
-		if ( k % 2 ) mpf_mul(temp, temp, x2);
-		mpf_add(x1, x1, temp);
+		if ( k % 2 ) mpf_sub(x1, x1, temp);
+		else mpf_add(x1, x1, temp);
 		mpf_clear(temp);
 	}
 
@@ -55,17 +58,14 @@ int main() {
 		mpf_init(partsum_array[k-N]);
 
 		mpf_div(temp, one, temp);
-		if ( k % 2 ) mpf_mul(temp, temp, x2);
-		mpf_add(x1, x1, temp);
+		if ( k % 2 ) mpf_sub(x1, x1, temp);
+		else mpf_add(x1, x1, temp);
 		mpf_set(partsum_array[k-N], x1);
 		mpf_clear(temp);
 	}
 
-	mpf_t setsize;
-	mpf_init_set_si(setsize, M);
-
 	for (int j = 0; j < M - 1; j++) {
-		for (k = 0; k < M-1; k++) {
+		for (k = 0; k < M - 1 - j; k++) {
 			mpf_add(partsum_array[k], partsum_array[k], partsum_array[k+1]);
 			mpf_div_ui(partsum_array[k], partsum_array[k], 2);
 		}
