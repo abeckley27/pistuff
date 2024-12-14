@@ -7,7 +7,7 @@
 #include <cstdint>
 #include <gmp.h>
 
-#define digits 1000
+#define digits 100000
 
 void factorial(int64_t n, mpf_t output) {
 	mpf_t a1;
@@ -61,7 +61,7 @@ int main() {
 	mpz_init(Qab);
 	mpz_init(Rab);
 
-	binary_split(1, 100, Pab, Qab, Rab);
+	binary_split(1, 1000, Pab, Qab, Rab);
 
 	mpf_t pi, radical, Q, denom;
 	mpf_init(pi);
@@ -84,8 +84,10 @@ int main() {
 
 	std::ofstream f;
 	std::string fname = "pi_" + std::to_string(digits) + ".txt";
+	
+
 	f.open(fname);
-	f << pi;
+	f << std::fixed << std::setprecision(digits) << pi;
 	f.close();
 
 	std::cout << "Time: " << double(clock() - t0) / CLOCKS_PER_SEC << " s\n";
