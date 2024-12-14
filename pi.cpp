@@ -7,7 +7,7 @@
 #include <cstdint>
 #include <gmp.h>
 
-#define digits 100000
+#define digits 1000
 
 void factorial(int64_t n, mpf_t output) {
 	mpf_t a1;
@@ -29,23 +29,27 @@ void binary_split(int a, int b, mpz_t P, mpz_t Q, mpz_t R) {
 	}
 	else {
 		int m = (a + b) / 2;
-		mpz_t Pam, Qam, Ram, Pmb, Qmb, Rmb;
+		mpz_t Pam, Qam, Ram, Pmb, Qmb, Rmb, Rterm2;
 		mpz_init(Pam);
 		mpz_init(Qam);
 		mpz_init(Ram);
 		mpz_init(Pmb);
 		mpz_init(Qmb);
 		mpz_init(Rmb);
+		mpz_init(Rterm2);
 
 		binary_split(a, m, Pam, Qam, Ram);
 		binary_split(m, b, Pmb, Qmb, Rmb);
 
 		mpz_mul(P, Pam, Pmb);
 		mpz_mul(Q, Qam, Qmb);
-		mpz_mul(R, Ram, Rmb);
+		mpz_mul(R, Ram, Qmb);
+		mpz_mul(Rterm2, Pam, Rmb);
+		mpz_add(R, R, Rterm2);
 
 		mpz_clear(Pam); mpz_clear(Qam); mpz_clear(Ram);
 		mpz_clear(Pmb); mpz_clear(Qmb); mpz_clear(Rmb);
+		mpz_clear(Rterm2);
 	}
 
 }
@@ -61,7 +65,7 @@ int main() {
 	mpz_init(Qab);
 	mpz_init(Rab);
 
-	binary_split(1, 1000, Pab, Qab, Rab);
+	binary_split(1, 80, Pab, Qab, Rab);
 
 	mpf_t pi, radical, Q, denom;
 	mpf_init(pi);
