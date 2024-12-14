@@ -9,6 +9,7 @@
 
 using namespace std;
 #define digits 10000
+#define magic_num 3.333
 
 void factorial(int64_t n, mpf_t output) {
 	mpf_t a1;
@@ -93,7 +94,7 @@ void chud_term(int64_t k, mpf_t output) {
 int main() {
 
 	clock_t t0 = clock();
-	const int64_t M = int64_t(digits * (3.333));
+	const int64_t M = int64_t(digits * (magic_num));
 	const int64_t N = int64_t(M / 14);
 	
 	mpf_set_default_prec(M);
@@ -128,7 +129,7 @@ int main() {
 	mpf_init(pi);
 	mpf_div(pi, x1, x4);
 
-	f << setprecision(M-2) << pi << endl;
+	f << fixed << setprecision(int(M/magic_num)) << pi << endl;
 	f.close();
 
 	cout << "Time: " << double(clock() - t0) / CLOCKS_PER_SEC << " s\n";
