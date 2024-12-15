@@ -9,7 +9,7 @@ import time
 import decimal
 
 t0 = time.time()
-decimal.getcontext().prec = 100000
+decimal.getcontext().prec = 1000
 a = decimal.Decimal(545140134)
 b = decimal.Decimal(13591409)
 c = decimal.Decimal(640320)
@@ -42,7 +42,7 @@ print("Time: %.3f" %(time.time() - t0))
 print("Checking digits")
 
 
-f = open("Pi-Dec-100k.txt", 'r')
+f = open("Pi - Dec - Chudnovsky.txt", 'r')
 fstr = f.read()
 f.close()
 
