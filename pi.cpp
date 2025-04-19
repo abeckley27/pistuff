@@ -55,7 +55,7 @@ void binary_split(int a, int b, mpz_t P, mpz_t Q, mpz_t R) {
 }
 
 
-int main() {
+int main(int argc, char *argv[]) {
 
 	clock_t t0 = clock();
 	mpf_set_default_prec(digits);
